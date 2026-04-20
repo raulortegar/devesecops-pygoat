@@ -56,7 +56,6 @@ jobs:
    - name: Build and push Image
      uses: docker/build-push-action@v5
      with:
-       file: ./pygoat/Dockerfile
        push: true
        tags: ${{ secrets.REPO_USER }}/pygoat:latest
       
