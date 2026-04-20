@@ -1,7 +1,10 @@
 name: CI
 
-on: [push]
-
+on: 
+  workflow_dispatch:  # <--- Esta línea es la que activa el botón
+  push:
+    branches:
+      - main
 jobs:
  sast_scan:
    name: Run Bandit Scan
@@ -9,7 +12,7 @@ jobs:
 
    steps:
    - name: Checkout code
-     uses: actions/checkout@v2
+     uses: actions/checkout@v4
 
    - name: Set up Python
      uses: actions/setup-python@v2
@@ -29,13 +32,13 @@ jobs:
       name: bandit-findings
       path: bandit-report.json
 
- image_scan:
+ build_image_scan:
    name: Build Image and Run Image Scan
    runs-on: ubuntu-latest
 
    steps:
    - name: Checkout code
-     uses: actions/checkout@v2
+     uses: actions/checkout@v4
 
    - name: Set up Docker
      uses: docker-practice/actions-setup-docker@v1
