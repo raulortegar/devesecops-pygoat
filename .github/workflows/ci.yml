@@ -1,12 +1,12 @@
 name: CI
 
 on: 
-  workflow_dispatch:  # <--- Esta línea es la que activa el botón
+#  workflow_dispatch:  # <--- Esta línea es la que activa el botón
   push:
     branches:
       - master
 jobs:
- sast_scan:
+ bandit_scan:
    name: Run Bandit Scan
    runs-on: ubuntu-latest
 
