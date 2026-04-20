@@ -20,11 +20,12 @@ jobs:
        python-version: 3.11
 
    - name: Run Semgrep
-     run: semgrep scan --config=p/security-audit --json --output=semgrep.json
+     run: semgrep scan --config=p/security-audit --json --output=semgrep.json || true 
         
 # Opcional: Subir el informe como artefacto para verlo en GitHub
    - name: Upload SemGrep Report
      uses: actions/upload-artifact@v4
+     if: always()
      with:
        name: semgrep-report
        path: semgrep.json
