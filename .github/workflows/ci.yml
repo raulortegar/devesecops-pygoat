@@ -34,19 +34,20 @@ jobs:
 
  build_image_scan:
    name: Build Image and Run Image Scan
+#   needs: sast_scan <-- Esta es la clave para que el job se ejecute después del análisis SAST 
    runs-on: ubuntu-latest
 
    steps:
    - name: Checkout code
      uses: actions/checkout@v4
 # Este paso ya no es necesario porque la última version de Ubuntu ya viene con Docker preinstalado
- #  - name: Set up Docker
- #    uses: docker-practice/actions-setup-docker@v1
-    # with:
-     # docker_version: '20.10.7'
+#  - name: Set up Docker
+#    uses: docker-practice/actions-setup-docker@v1
+#    # with:
+#     # docker_version: '20.10.7'
 
    - name: Build Docker Image
-     run: docker build -f Dockerfile -t myapp:latest .
+     run: docker build -f Dockerfile -t pygoat:latest .
 
    # - name: Docker Scout Scan
      # run: |
@@ -71,3 +72,8 @@ jobs:
      with:
        name: docker-scout-findings
        path: scout-report.sarif
+   - name: Upload SARIF results to GitHub Security
+     uses: github/codeql-action/upload-sarif@v3
+     if: always()
+     with:
+       sarif_file: scout-report.sarif
