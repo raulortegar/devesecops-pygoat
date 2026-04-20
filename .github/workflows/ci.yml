@@ -19,18 +19,6 @@ jobs:
      with:
        python-version: 3.11
 
-   - name: Run Semgrep
-     run: semgrep scan --config=p/security-audit --json --output=semgrep.json || true 
-        
-# Opcional: Subir el informe como artefacto para verlo en GitHub
-   - name: Upload SemGrep Report
-     uses: actions/upload-artifact@v4
-     if: always()
-     with:
-       name: semgrep-report
-       path: semgrep.json
-   
-
    - name: Install Bandit
      run: pip install bandit
 
@@ -43,6 +31,33 @@ jobs:
      with:
       name: bandit-findings
       path: bandit-report.json
+
+ semgrep_scan:
+   name: Run Semgrep Scan
+   runs-on: ubuntu-latest
+   container:
+     image: returntocorp/semgrep:latest
+   steps:
+   - name: Checkout code
+     uses: actions/checkout@v4
+
+   - name: Set up Python
+     uses: actions/setup-python@v5
+     with:
+       python-version: 3.11
+
+   - name: Run Semgrep
+     run: semgrep scan --config=p/security-audit --json --output=semgrep.json || true      
+
+# Opcional: Subir el informe como artefacto para verlo en GitHub
+   - name: Upload SemGrep Report
+     uses: actions/upload-artifact@v4
+     if: always()
+     with:
+       name: semgrep-report
+       path: semgrep.json
+
+
 
  build_image_scan:
    name: Build Image and Run Image Scan
