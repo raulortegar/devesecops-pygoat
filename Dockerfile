@@ -9,6 +9,7 @@ WORKDIR /app
 # Dependencias para psycopg2 (limpio y compatible con Bookworm)
 RUN apt-get update && apt-get install --no-install-recommends -y \
     dnsutils \
+    gcc \
     libpq-dev \
     python3-dev \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -19,9 +20,12 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
 
-# Install dependencies
-RUN python -m pip install --upgrade pip # Actualiza pip a la última versión, en lugar de versión antigua
+
 COPY requirements.txt requirements.txt
+
+# Install dependencies
+# Actualiza pip a la última versión, en lugar de versión antigua
+RUN python -m pip install --upgrade pip 
 RUN pip install --no-cache-dir -r requirements.txt
 
 
