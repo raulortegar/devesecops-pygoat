@@ -45,15 +45,21 @@ jobs:
 #    uses: docker-practice/actions-setup-docker@v1
 #    # with:
 #     # docker_version: '20.10.7'
+   # 1. Necesio login primero
+   - name: Login to Docker Hub
+     uses: docker/login-action@v3
+     with:
+       username: ${{ secrets.REPO_USER }}
+       password: ${{ secrets.REPO_PWD }}
 
+   # 2. Ahora sí puedes buildear y pushear
    - name: Build and push Image
      uses: docker/build-push-action@v5
      with:
        file: ./pygoat/Dockerfile
        push: true
        tags: ${{ secrets.REPO_USER }}/pygoat:latest
-       secrets: |
-            GIT_AUTH_TOKEN=${{ secrets.REPO_PWD }}
+      
 
    # - name: Docker Scout Scan
      # run: |
