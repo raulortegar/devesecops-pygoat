@@ -7,7 +7,7 @@ on:
       - master
 jobs:
  sast_scan:
-   name: Run Bandit Scan
+   name: Run Bandit&Semgrep Scan
    runs-on: ubuntu-latest
 
    steps:
@@ -19,13 +19,24 @@ jobs:
      with:
        python-version: 3.11
 
+   - name: Run Semgrep
+     run: semgrep scan --config=p/security-audit --json --output=semgrep.json
+        
+# Opcional: Subir el informe como artefacto para verlo en GitHub
+   - name: Upload SemGrep Report
+     uses: actions/upload-artifact@v4
+     with:
+       name: semgrep-report
+       path: semgrep.json
+   
+
    - name: Install Bandit
      run: pip install bandit
 
    - name: Run Bandit Scan
      run: bandit -ll -ii -r . -f json -o bandit-report.json || true #FUERZO QUE TEMINE OK PARA QUE SIGA EL FLUJO. 
 
-   - name: Upload Artifact
+   - name: Upload Bandit Report
      uses: actions/upload-artifact@v4
      if: always()
      with:
